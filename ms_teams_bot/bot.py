@@ -3,13 +3,19 @@
 
 from botbuilder.core import ActivityHandler, TurnContext
 from botbuilder.schema import ChannelAccount
+import utils
 
 
 class MyBot(ActivityHandler):
     # See https://aka.ms/about-bot-activity-message to learn more about the message and other activity types.
 
     async def on_message_activity(self, turn_context: TurnContext):
-        await turn_context.send_activity(f"You said '{ turn_context.activity.text }'")
+        text = turn_context.activity.text.strip().lower()
+        if "football" in  text:
+            fixture = utils.get_fixture()
+            await turn_context.send_activity(f"Our next fixture is against {fixture}")
+        else:
+            await turn_context.send_activity(f"You said '{ turn_context.activity.text }'")
 
     async def on_members_added_activity(
         self,
