@@ -12,8 +12,8 @@ class MyBot(ActivityHandler):
     async def on_message_activity(self, turn_context: TurnContext):
         text = turn_context.activity.text.strip().lower()
         if "football" in  text:
-            date, opponent = await scraping.get_fixture()
-            await turn_context.send_activity(f"Our next fixture is against {opponent} on {date}")
+            date, opponent, pitch = await scraping.get_fixture()
+            await turn_context.send_activity(f"Our next fixture is against {opponent} on {date}, {pitch}")
         else:
             await turn_context.send_activity(f"You said '{ turn_context.activity.text }'")
 
