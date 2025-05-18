@@ -55,6 +55,20 @@ def load_html(filepath):
     with open(filepath, "r", encoding="utf-8") as f:
         return f.read()
 
+def format_date(date):
+    date_obj = datetime.datetime.strptime(date, "%d/%m/%Y")
+    day = date_obj.day
+    suffix = "th" if 11 <= day <= 13 else {1: "st", 2: "nd", 3: "rd"}.get(day % 10, "th")
+    return date_obj.strftime(f"%A {day}{suffix}")
+
+def format_pitch(pitch):
+    match = re.search(r"Pitch\s+\d+", pitch)
+    return match.group(0) if match else "Any pitch"
+
+def format_opponent(opponent):
+    opponent_clean = opponent.replace("Warwick IFL 24-25", "").replace("Mixed football 5s", "").strip()
+    return opponent_clean
+
 async def get_fixture():
 # def get_fixture():
     timeslot = "4pm-6pm"
@@ -83,13 +97,13 @@ async def get_fixture():
             if re.match(r"\d{1,2}/\d{1,2}/\d{2,4}", line):
                 date_obj = datetime.datetime.strptime(line, "%d/%m/%Y")
                 if today <= date_obj <= today + datetime.timedelta(days=7):
-                    date = date_obj.strftime("%d/%m/%Y")
+                    date = format_date(date_obj.strftime("%d/%m/%Y"))
 
             if "Pitch" in line and "Provider" in line:
-                pitch = line
+                pitch = format_pitch(line)
             
             if "Warwick IFL 24-25" in line and not "WMG" in line:
-                opponent = line
+                opponent = format_opponent(line)
 
     if date and opponent and pitch:
         print(f"Date: {date}\nOpponent: {opponent}\nPitch: {pitch}")
