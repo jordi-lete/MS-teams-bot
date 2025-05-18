@@ -1,4 +1,4 @@
-from scraping2 import get_fixture
+from scraping import get_fixture
 
 if __name__ == "__main__":
     date, opponent, pitch = get_fixture()
