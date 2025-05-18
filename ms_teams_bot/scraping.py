@@ -6,36 +6,46 @@ from playwright.async_api import async_playwright
 from playwright.sync_api import sync_playwright
 # Other utils
 import datetime
+import re
 
 # Make a request to the Playwaze website
-async def set_up_website(URL):
+async def set_up_website(URL, team_name):
     async with async_playwright() as p:
         html = None
         browser = await p.chromium.launch(headless=True)
         page = await browser.new_page()
         await page.goto(URL)
-        await page.click("text=Fixtures", force=True)
-        await page.wait_for_timeout(2000) # wait (milliseconds)
-        await page.click("text=Filter by division", force=True)
-        await page.wait_for_timeout(2000) # wait (milliseconds)
-        await page.click("text=4pm-6pm", force=True)
-        await page.wait_for_timeout(2000) # wait (milliseconds)
+        await page.locator("text=Team").nth(1).click(force=True)
+        await page.wait_for_timeout(1000) # wait (milliseconds)
+        await page.keyboard.type("WMG")
+        await page.wait_for_timeout(1000) # wait (milliseconds)
+        await page.click(f"text={team_name}", force=True)
+        await page.wait_for_timeout(1000) # wait (milliseconds)
+        await page.click("text=Filter by date", force=True)
+        await page.wait_for_timeout(1000) # wait (milliseconds)
+        await page.click("text=Next 7 days", force=True)
+        await page.wait_for_timeout(1000) # wait (milliseconds)
         html = await page.content()
         await browser.close()
         return html
     
-def set_up_website_static(URL):
+def set_up_website_static(URL, team_name):
     with sync_playwright() as p:
         html = None
         browser = p.chromium.launch(headless=True)
         page = browser.new_page()
         page.goto(URL)
-        page.click("text=Fixtures", force=True)
-        page.wait_for_timeout(2000) # wait (milliseconds)
-        page.click("text=Filter by division", force=True)
-        page.wait_for_timeout(2000) # wait (milliseconds)
-        page.click("text=4pm-6pm", force=True)
-        page.wait_for_timeout(2000) # wait (milliseconds)
+        page.locator("text=Team").nth(1).click(force=True)
+        page.wait_for_timeout(1000) # wait (milliseconds)
+        page.keyboard.type("WMG")
+        page.wait_for_timeout(1000) # wait (milliseconds)
+        # page.screenshot(path="debug.png", full_page=True)
+        page.click(f"text={team_name}", force=True)
+        page.wait_for_timeout(1000) # wait (milliseconds)
+        page.click("text=Filter by date", force=True)
+        page.wait_for_timeout(1000) # wait (milliseconds)
+        page.click("text=Next 7 days", force=True)
+        page.wait_for_timeout(1000) # wait (milliseconds)
         html = page.content()
         browser.close()
         return html
@@ -49,34 +59,41 @@ async def get_fixture():
 # def get_fixture():
     timeslot = "4pm-6pm"
     team_name = "Warwick IFL 24-25 WMG FC Mixed Football 5s"
-    URL = "https://bucs.playwaze.com/ims-football---warwick-24-25/cclrwgbo21zv9i/league-display/Leagues/1kjdxip63mpn"
+    URL = "https://bucs.playwaze.com/ims-football---warwick-24-25/cclrwgbo21zv9i/community-details?Tab=Fixtures#"
 
-    html = await set_up_website(URL)
-    # html = set_up_website_static(URL)
-    # html = load_html("ms_teams_bot/web.html")
+    html = await set_up_website(URL, team_name)
+    # html = set_up_website_static(URL, team_name)
+    # html = load_html("ms_teams_bot/web3.html")
 
     soup = BeautifulSoup(html, "html.parser")
 
     today = datetime.datetime.today()
 
-    fixture_dates = soup.find_all("div", class_="fixture-list-date")
-    for date in fixture_dates:
-        date_str = date.get("data-date")
-        if not date_str:
-            continue
-        date_obj = datetime.datetime.strptime(date_str, "%d%b%Y")
-        if today <= date_obj <= today + datetime.timedelta(days=7):
-            fixtures = date.find_all_next("div", class_="fixture-list")
-            for fixture in fixtures:
-                # stop searching when we find the next date
-                next_date = fixture.find_previous("div", class_="fixture-list-date")
-                if next_date != date:
-                    break
-                if team_name in fixture.text:
-                    team_spans = fixture.find_all("span", function="GetTeamData")
-                    opponent = [s.text.strip() for s in team_spans if "WMG FC" not in s.text]
-                    if opponent:
-                        print(f"Next fixture: {date_str} vs {opponent[0]}")
-                        return date_str, opponent[0]
-    print("There is no game this week")
-    return None, None
+    rows = soup.find_all("div", class_="grid-row-1")
+
+    date = None
+    opponent = None
+    pitch = None
+
+    for row in rows:
+        lines = [line.strip() for line in row.stripped_strings]
+
+        for i, line in enumerate(lines):
+            # Look for format DD/MM/YYYY or D/M/YY
+            if re.match(r"\d{1,2}/\d{1,2}/\d{2,4}", line):
+                date_obj = datetime.datetime.strptime(line, "%d/%m/%Y")
+                if today <= date_obj <= today + datetime.timedelta(days=7):
+                    date = date_obj.strftime("%d/%m/%Y")
+
+            if "Pitch" in line and "Provider" in line:
+                pitch = line
+            
+            if "Warwick IFL 24-25" in line and not "WMG" in line:
+                opponent = line
+
+    if date and opponent and pitch:
+        print(f"Date: {date}\nOpponent: {opponent}\nPitch: {pitch}")
+        return date, opponent, pitch
+
+    print("No game this week")
+    return None, None, None
