@@ -4,12 +4,15 @@
 from botbuilder.core import ActivityHandler, TurnContext
 from botbuilder.schema import ChannelAccount
 import scraping
+import scheduling
 
 
 class MyBot(ActivityHandler):
     # See https://aka.ms/about-bot-activity-message to learn more about the message and other activity types.
 
     async def on_message_activity(self, turn_context: TurnContext):
+        conversation_reference = TurnContext.get_conversation_reference(turn_context.activity)
+        scheduling.save_conversation_reference(conversation_reference)
         text = turn_context.activity.text.strip().lower()
         if "football" in  text:
             date, opponent, pitch = await scraping.get_fixture()

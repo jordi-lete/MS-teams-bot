@@ -18,6 +18,8 @@ from botbuilder.schema import Activity, ActivityTypes
 from bot import MyBot
 from config import DefaultConfig
 
+from scheduling import schedule_message
+
 CONFIG = DefaultConfig()
 
 # Create adapter.
@@ -79,6 +81,12 @@ async def messages(req: Request) -> Response:
 
 APP = web.Application(middlewares=[aiohttp_error_middleware])
 APP.router.add_post("/api/messages", messages)
+
+async def on_startup(app):
+    await schedule_message(ADAPTER, CONFIG.APP_ID)
+    print("Scheduler started.")
+
+APP.on_startup.append(on_startup)
 
 if __name__ == "__main__":
     try:
