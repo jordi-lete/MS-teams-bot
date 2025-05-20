@@ -7,9 +7,9 @@ It scrapes fixture data from a specified webpage, parses the relevant informatio
 
 ## Tech Stack
 
-| Category       | Tools/Libraries Used                                   |
+|        | Tools/Libraries Used                                   |
 |----------------|--------------------------------------------------------|
-| **Bot Framework** | `botbuilder-core`, `aiohttp`                        |
+| **Bot Framework** | `botbuilder`, `botframework`                      |
 | **Web Scraping**  | [`BeautifulSoup`](https://pypi.org/project/beautifulsoup4/), [`Playwright`](https://playwright.dev/python/) |
 | **Scheduling**    | [`APScheduler`](https://apscheduler.readthedocs.io/) |
 | **Async Runtime** | `asyncio`, `aiohttp.web`                            |
