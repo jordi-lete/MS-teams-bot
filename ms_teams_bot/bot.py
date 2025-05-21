@@ -14,17 +14,16 @@ class MyBot(ActivityHandler):
         conversation_reference = TurnContext.get_conversation_reference(turn_context.activity)
         scheduling.save_conversation_reference(conversation_reference)
         text = turn_context.activity.text.strip().lower()
-        if "football" in  text:
+        if "?fixture" in  text:
             date, opponent, pitch = await scraping.get_fixture()
             await turn_context.send_activity(f"Our next fixture is against {opponent} on {date}, {pitch}")
-        else:
-            await turn_context.send_activity(f"You said '{ turn_context.activity.text }'")
 
     async def on_members_added_activity(
         self,
         members_added: ChannelAccount,
         turn_context: TurnContext
     ):
+        bot_id = turn_context.activity.recipient.id
         for member_added in members_added:
-            if member_added.id != turn_context.activity.recipient.id:
-                await turn_context.send_activity("Hello and welcome!")
+            if member_added.id == bot_id:
+                await turn_context.send_activity("Hi, I'm a chatbot! I'll notify you of upcoming fixtures and results.")
