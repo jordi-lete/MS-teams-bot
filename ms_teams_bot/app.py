@@ -1,6 +1,6 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
-
+print("BOT STARTING")
 import sys
 import traceback
 from datetime import datetime
@@ -90,6 +90,7 @@ APP.on_startup.append(on_startup)
 
 if __name__ == "__main__":
     try:
+        print("Bot initialising")
         web.run_app(APP, host="localhost", port=CONFIG.PORT)
     except Exception as error:
         raise error

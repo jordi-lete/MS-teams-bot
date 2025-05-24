@@ -1,4 +1,4 @@
-import asyncio
+# import asyncio
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from scraping import get_fixture
 from botbuilder.schema import Activity
@@ -46,8 +46,8 @@ async def compose_message(adapter, app_id):
 
 async def schedule_message(adapter, app_id):
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(compose_message, "cron", day_of_week="mon", hour=9, minute=0, args=[adapter, app_id])
-    # scheduler.add_job(compose_message, "interval", seconds=30, args=[adapter, app_id])
+    # scheduler.add_job(compose_message, "cron", day_of_week="mon", hour=9, minute=0, args=[adapter, app_id])
+    scheduler.add_job(compose_message, "interval", seconds=30, args=[adapter, app_id])
     scheduler.start()
     # For testing without bot framework
     # while True:
