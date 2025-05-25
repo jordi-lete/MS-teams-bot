@@ -13,7 +13,7 @@ It scrapes fixture data from a specified webpage, parses the relevant informatio
 | **Web Scraping**  | [`BeautifulSoup`](https://pypi.org/project/beautifulsoup4/), [`Playwright`](https://playwright.dev/python/) |
 | **Scheduling**    | [`APScheduler`](https://apscheduler.readthedocs.io/) |
 | **Async Runtime** | `asyncio`, `aiohttp.web`                            |
-| **Deployment**    | Azure App Service (planned)                         |
+| **Deployment**    | Azure App Service, Azure Bot Service                        |
 
 ---
 
