@@ -1,0 +1,48 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "appServiceName": {
+            "value": "wmgfc-app"
+        },
+        "existingAppServicePlanName": {
+            "value": ""
+        },
+        "existingAppServicePlanLocation": {
+            "value": ""
+        },
+        "newAppServicePlanName": {
+            "value": "wmgfc-app-plan"
+        },
+        "newAppServicePlanLocation": {
+            "value": "UK South"
+        },
+        "newAppServicePlanSku": {
+            "value": {
+                "name": "F1",
+                "tier": "Free",
+                "size": "F1",
+                "family": "F",
+                "capacity": 1
+            }
+        },
+        "appType": {
+            "value": "MultiTenant"
+        },
+        "appId": {
+            "value": "0d00d429-9db2-49ae-8fc6-6cffa1b68269"
+        },
+        "appSecret": {
+            "value": "Eml8Q~zEa6y9OQeCuHcyNQcK8VxuZwxlFdtRyaNE"
+        },
+        "tenantId": {
+            "value": ""
+        },
+        "UMSIName": {
+            "value": ""
+        },
+        "UMSIResourceGroupName": {
+            "value": ""
+        }
+    }
+}

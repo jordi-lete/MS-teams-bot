@@ -1,0 +1,33 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "azureBotId": {
+            "value": "WMGFC-BOT-JS"
+        },
+        "azureBotSku": {
+            "value": "F0"
+        },
+        "azureBotRegion": {
+            "value": "global"
+        },
+        "botEndpoint": {
+            "value": "https://wmgfc-app.azurewebsites.net/api/messages"
+        },
+        "appType": {
+          "value": "MultiTenant"
+        },
+        "appId": {
+            "value": "0d00d429-9db2-49ae-8fc6-6cffa1b68269"
+        },
+        "UMSIName": {
+            "value": ""
+        },
+        "UMSIResourceGroupName": {
+            "value": ""
+        },
+        "tenantId": {
+          "value": ""
+        }
+    }
+}
