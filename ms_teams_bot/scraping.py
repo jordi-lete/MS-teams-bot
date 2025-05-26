@@ -1,54 +1,36 @@
 # Web scraping libraries
-import requests
 from bs4 import BeautifulSoup
-# library to simulate user interaction
-from playwright.async_api import async_playwright
-from playwright.sync_api import sync_playwright
 # Other utils
 import datetime
 import re
 
-# Make a request to the Playwaze website
-async def set_up_website(URL, team_name):
-    async with async_playwright() as p:
-        html = None
-        browser = await p.chromium.launch(headless=True)
-        page = await browser.new_page()
-        await page.goto(URL)
-        await page.locator("text=Team").nth(1).click(force=True)
-        await page.wait_for_timeout(1000) # wait (milliseconds)
-        await page.keyboard.type("WMG")
-        await page.wait_for_timeout(1000) # wait (milliseconds)
-        await page.click(f"text={team_name}", force=True)
-        await page.wait_for_timeout(1000) # wait (milliseconds)
-        await page.click("text=Filter by date", force=True)
-        await page.wait_for_timeout(1000) # wait (milliseconds)
-        await page.click("text=Next 7 days", force=True)
-        await page.wait_for_timeout(1000) # wait (milliseconds)
-        html = await page.content()
-        await browser.close()
-        return html
+import requests
+
+def fetch_filtered_fixtures():
+    url = "https://bucs.playwaze.com/fixture/getfixtures"
     
-def set_up_website_static(URL, team_name):
-    with sync_playwright() as p:
-        html = None
-        browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
-        page.goto(URL)
-        page.locator("text=Team").nth(1).click(force=True)
-        page.wait_for_timeout(1000) # wait (milliseconds)
-        page.keyboard.type("WMG")
-        page.wait_for_timeout(1000) # wait (milliseconds)
-        # page.screenshot(path="debug.png", full_page=True)
-        page.click(f"text={team_name}", force=True)
-        page.wait_for_timeout(1000) # wait (milliseconds)
-        page.click("text=Filter by date", force=True)
-        page.wait_for_timeout(1000) # wait (milliseconds)
-        page.click("text=Next 7 days", force=True)
-        page.wait_for_timeout(1000) # wait (milliseconds)
-        html = page.content()
-        browser.close()
-        return html
+    headers = {
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        "Origin": "https://bucs.playwaze.com",
+        "Referer": "https://bucs.playwaze.com/ims-football---warwick-24-25/cclrwgbo21zv9i/community-details?Tab=Fixtures",
+        "User-Agent": "Mozilla/5.0",  # You can use a real user-agent string here
+        "X-Requested-With": "XMLHttpRequest"
+    }
+    
+    data = {
+        "Id": "CommunityDocuments/cclrwgbo21zv9i",
+        "MatchStatus": "1",  # 1 means upcoming fixtures
+        "ViewTab": "tableview",
+        "TeamIdList": ",teams/624870-B",  # Warwick IFL 24-25 WMG FC Mixed Football 5s
+    }
+
+    response = requests.post(url, headers=headers, data=data)
+    
+    if response.status_code == 200:
+        return response.text  # You can change this to response.json() if it returns JSON
+    else:
+        print("Request failed:", response.status_code)
+        return None
 
 # Load from a static html file
 def load_html(filepath):
@@ -69,15 +51,19 @@ def format_opponent(opponent):
     opponent_clean = opponent.replace("Warwick IFL 24-25", "").replace("Mixed football 5s", "").strip()
     return opponent_clean
 
-async def get_fixture():
-# def get_fixture():
+# async def get_fixture():
+def get_fixture():
     timeslot = "4pm-6pm"
     team_name = "Warwick IFL 24-25 WMG FC Mixed Football 5s"
     URL = "https://bucs.playwaze.com/ims-football---warwick-24-25/cclrwgbo21zv9i/community-details?Tab=Fixtures#"
 
-    html = await set_up_website(URL, team_name)
+    # html = await set_up_website(URL, team_name)
     # html = set_up_website_static(URL, team_name)
     # html = load_html("ms_teams_bot/web3.html")
+
+    html = fetch_filtered_fixtures()
+    if not html:
+        return "Failed to fetch fixtures."
 
     soup = BeautifulSoup(html, "html.parser")
 

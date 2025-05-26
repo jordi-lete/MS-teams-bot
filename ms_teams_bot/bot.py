@@ -15,7 +15,7 @@ class MyBot(ActivityHandler):
         scheduling.save_conversation_reference(conversation_reference)
         text = turn_context.activity.text.strip().lower()
         if "?fixture" in  text:
-            date, opponent, pitch = await scraping.get_fixture()
+            date, opponent, pitch = scraping.get_fixture()
             await turn_context.send_activity(f"Our next fixture is against {opponent} on {date}, {pitch}")
 
     async def on_members_added_activity(
