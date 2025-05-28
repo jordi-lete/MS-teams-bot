@@ -1,0 +1,65 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/teams/v1.20/MicrosoftTeams.schema.json",
+    "manifestVersion": "1.20",
+    "version": "1.0.0",
+    "id": "0d00d429-9db2-49ae-8fc6-6cffa1b68269",
+    "developer": {
+        "name": "Jordi Smith",
+        "websiteUrl": "https://yourcompany.com",
+        "privacyUrl": "https://yourcompany.com/privacy",
+        "termsOfUseUrl": "https://yourcompany.com/terms"
+    },
+    "icons": {
+        "outline": "A relative path to a transparent .png icon — 32px X 32px",
+        "color": "A relative path to a full color .png icon — 192px X 192px"
+    },
+    "name": {
+        "short": "wmgfc-app"
+    },
+    "description": {
+        "short": "Teams bot that provides updates on football fixtures",
+        "full": "Teams bot that provides updates on football fixtures. Uses beutiful soup for web scraping, and Microsoft bot framework along with Azure for deployment"
+    },
+    "accentColor": "#FFFFFF",
+    "bots": [
+        {
+        "botId": "0d00d429-9db2-49ae-8fc6-6cffa1b68269",
+        "scopes": [
+            "personal",
+            "team",
+            "groupChat"
+        ],
+        "supportsFiles": false,
+        "isNotificationOnly": false,
+        "supportsCalling": false,
+        "supportsVideo": false,
+        "commandLists": [
+            {
+            "scopes": [
+                "personal",
+                "team",
+                "groupChat"
+            ],
+            "commands": [
+                {
+                "title": "Help",
+                "description": "Get help and see available commands"
+                },
+                {
+                "title": "?fixure",
+                "description": "Trigger the web scraping function. Returns the upcoming fixture information (team, date, pitch) if there is any"
+                }
+            ]
+            }
+        ]
+        }
+    ],
+    "permissions": [
+        "identity",
+        "messageTeamMembers"
+    ],
+    "validDomains": [
+        "wmgfc-app.azurewebsites.net"
+    ]
+}
+
