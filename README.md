@@ -5,6 +5,8 @@ This bot is designed to **automate and moderate a 5-a-side football group chat**
 
 It scrapes fixture data from a specified webpage, parses the relevant information (e.g. date, opponent, and pitch), and posts weekly updates directly into the Teams chat.
 
+To create your own custom chat bot, an extremely useful guide can be found at: https://learn.microsoft.com/en-us/azure/bot-service/bot-service-quickstart-create-bot?view=azure-bot-service-4.0&tabs=csharp%2Cvs
+
 ## Tech Stack
 
 |        | Tools/Libraries Used                                   |
