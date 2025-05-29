@@ -5,13 +5,13 @@
     "id": "0d00d429-9db2-49ae-8fc6-6cffa1b68269",
     "developer": {
         "name": "Jordi Smith",
-        "websiteUrl": "https://yourcompany.com",
-        "privacyUrl": "https://yourcompany.com/privacy",
-        "termsOfUseUrl": "https://yourcompany.com/terms"
+        "websiteUrl": "https://learn.microsoft.com/en-us/azure/bot-service/?view=azure-bot-service-4.0",
+        "privacyUrl": "https://www.microsoft.com/en-us/privacy/privacystatement",
+        "termsOfUseUrl": "https://www.microsoft.com/en-us/servicesagreement/"
     },
     "icons": {
-        "outline": "A relative path to a transparent .png icon — 32px X 32px",
-        "color": "A relative path to a full color .png icon — 192px X 192px"
+        "outline": "bot-icon-outline.png",
+        "color": "bot-icon-color.png"
     },
     "name": {
         "short": "wmgfc-app"
@@ -46,7 +46,7 @@
                 "description": "Get help and see available commands"
                 },
                 {
-                "title": "?fixure",
+                "title": "?fixture",
                 "description": "Trigger the web scraping function. Returns the upcoming fixture information (team, date, pitch) if there is any"
                 }
             ]
